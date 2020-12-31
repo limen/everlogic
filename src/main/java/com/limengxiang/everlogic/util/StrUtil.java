@@ -1,5 +1,8 @@
 package com.limengxiang.everlogic.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StrUtil {
 
     public static int compare(String s1, String s2) {
@@ -13,6 +16,14 @@ public class StrUtil {
             return 1;
         }
         return compareChars(s1, s2);
+    }
+
+    public static List<String> toStringList(List list) {
+        List<String> strings = new ArrayList<>();
+        for (Object v : list) {
+            strings.add(String.valueOf(v));
+        }
+        return strings;
     }
 
     private static int compareChars(String s1, String s2) {

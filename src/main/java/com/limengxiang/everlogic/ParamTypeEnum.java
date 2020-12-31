@@ -7,5 +7,4 @@ public enum ParamTypeEnum {
     json,
     numArr,
     strArr,
-    boolArr,
 }

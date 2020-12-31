@@ -1,15 +1,15 @@
 import com.limengxiang.everlogic.LogicParamBag;
-import com.limengxiang.everlogic.LogicTypeEnum;
+import com.limengxiang.everlogic.LogicOperatorEnum;
 import com.limengxiang.everlogic.OperatorConst;
 import com.limengxiang.everlogic.ParamTypeEnum;
-import com.limengxiang.everlogic.condition.Group;
+import com.limengxiang.everlogic.group.LogicGroup;
 import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 
-public class GroupTest {
+public class LogicGroupTest {
 
     @SneakyThrows
     @Test
@@ -27,23 +27,23 @@ public class GroupTest {
         p3.setOperator(OperatorConst.GREATER_THAN_OR_EQUAL);
         p3.setOperands(Arrays.asList("1000", "999.9"));
 
-        Group logicGroup = new Group();
-        logicGroup.setLogicType(LogicTypeEnum.and);
+        LogicGroup logicGroup = new LogicGroup();
+        logicGroup.setLogicOperator(LogicOperatorEnum.and);
         logicGroup.setParamBags(Arrays.asList(p1, p2));
         Assert.assertFalse(logicGroup.process());
 
-        logicGroup.setLogicType(LogicTypeEnum.or);
+        logicGroup.setLogicOperator(LogicOperatorEnum.or);
         Assert.assertTrue(logicGroup.process());
 
-        logicGroup.setLogicType(LogicTypeEnum.xor);
+        logicGroup.setLogicOperator(LogicOperatorEnum.xor);
         Assert.assertTrue(logicGroup.process());
 
-        logicGroup.setLogicType(LogicTypeEnum.and);
+        logicGroup.setLogicOperator(LogicOperatorEnum.and);
         logicGroup.setParamBags(Arrays.asList(p1, p2, p3));
         Assert.assertFalse(logicGroup.process());
-        logicGroup.setLogicType(LogicTypeEnum.or);
+        logicGroup.setLogicOperator(LogicOperatorEnum.or);
         Assert.assertTrue(logicGroup.process());
-        logicGroup.setLogicType(LogicTypeEnum.xor);
+        logicGroup.setLogicOperator(LogicOperatorEnum.xor);
         Assert.assertFalse(logicGroup.process());
     }
 
@@ -63,23 +63,23 @@ public class GroupTest {
         p3.setOperator(OperatorConst.START_WITH);
         p3.setOperands(Arrays.asList("abcd", "abc"));
 
-        Group logicGroup = new Group();
-        logicGroup.setLogicType(LogicTypeEnum.and);
+        LogicGroup logicGroup = new LogicGroup();
+        logicGroup.setLogicOperator(LogicOperatorEnum.and);
         logicGroup.setParamBags(Arrays.asList(p1, p2));
         Assert.assertFalse(logicGroup.process());
 
-        logicGroup.setLogicType(LogicTypeEnum.or);
+        logicGroup.setLogicOperator(LogicOperatorEnum.or);
         Assert.assertTrue(logicGroup.process());
 
-        logicGroup.setLogicType(LogicTypeEnum.xor);
+        logicGroup.setLogicOperator(LogicOperatorEnum.xor);
         Assert.assertTrue(logicGroup.process());
 
-        logicGroup.setLogicType(LogicTypeEnum.and);
+        logicGroup.setLogicOperator(LogicOperatorEnum.and);
         logicGroup.setParamBags(Arrays.asList(p1, p2, p3));
         Assert.assertFalse(logicGroup.process());
-        logicGroup.setLogicType(LogicTypeEnum.or);
+        logicGroup.setLogicOperator(LogicOperatorEnum.or);
         Assert.assertTrue(logicGroup.process());
-        logicGroup.setLogicType(LogicTypeEnum.xor);
+        logicGroup.setLogicOperator(LogicOperatorEnum.xor);
         Assert.assertFalse(logicGroup.process());
     }
 }

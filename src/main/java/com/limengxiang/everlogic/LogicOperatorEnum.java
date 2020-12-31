@@ -1,6 +1,6 @@
 package com.limengxiang.everlogic;
 
-public enum LogicTypeEnum {
+public enum LogicOperatorEnum {
     and,
     or,
     xor,

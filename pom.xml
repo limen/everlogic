@@ -10,23 +10,8 @@
     </properties>
 
     <groupId>com.limengxiang</groupId>
-    <artifactId>evercon</artifactId>
+    <artifactId>everlogic</artifactId>
     <version>0.1.0</version>
-
-    <repositories>
-        <repository>
-            <id>aliyun</id>
-            <name>aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>aliyun</id>
-            <name>aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencies>
         <dependency>
