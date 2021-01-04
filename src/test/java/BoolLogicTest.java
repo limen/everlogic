@@ -1,7 +1,7 @@
 import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.OperatorConst;
 import com.limengxiang.everlogic.ParamTypeEnum;
-import com.limengxiang.everlogic.logic.bool.BoolLogic;
+import com.limengxiang.everlogic.logic.BoolLogic;
 import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,6 +23,12 @@ public class BoolLogicTest {
         paramBag.setOperands(Arrays.asList(false, true));
         Assert.assertFalse(boolLogic.process(paramBag));
         paramBag.setOperands(Arrays.asList(false, false));
+        Assert.assertTrue(boolLogic.process(paramBag));
+        paramBag.setOperands(Arrays.asList(null, false));
+        Assert.assertTrue(boolLogic.process(paramBag));
+        paramBag.setOperands(Arrays.asList(null, null));
+        Assert.assertTrue(boolLogic.process(paramBag));
+        paramBag.setOperands(Arrays.asList(false, "false"));
         Assert.assertTrue(boolLogic.process(paramBag));
     }
 

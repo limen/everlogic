@@ -1,5 +1,9 @@
 package com.limengxiang.everlogic;
 
+/**
+ * @author LI Mengxiang <limengxiang876@gmail.com>
+ *
+ */
 public class OperatorConst {
     /**
      * compatible to string, number

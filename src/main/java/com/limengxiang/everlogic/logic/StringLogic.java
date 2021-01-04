@@ -1,10 +1,26 @@
-package com.limengxiang.everlogic.logic.string;
+package com.limengxiang.everlogic.logic;
 
 import com.limengxiang.everlogic.LogicParamBag;
-import com.limengxiang.everlogic.LogicUnit;
-import com.limengxiang.everlogic.util.StrUtil;
+import com.limengxiang.everlogic.comparator.Comparator;
+import com.limengxiang.everlogic.comparator.StringComparator;
+import com.limengxiang.everlogic.converter.Converter;
+import com.limengxiang.everlogic.converter.StringConverter;
 
-public class StringLogic implements LogicUnit {
+/**
+ * @author LI Mengxiang <limengxiang876@gmail.com>
+ *
+ */
+public class StringLogic extends AbstractLogicUnit {
+
+    @Override
+    public Converter getDefaultConverter() {
+        return new StringConverter();
+    }
+
+    @Override
+    public Comparator getDefaultComparator() {
+        return new StringComparator();
+    }
 
     private enum StringOperator {
         gt,
@@ -27,21 +43,22 @@ public class StringLogic implements LogicUnit {
         } catch (Exception ex) {
             throw new Exception("Unsupported operator:" + paramBag.getOperator());
         }
-        String leftOperand = (String) paramBag.getOperands().get(0);
-        String rightOperand = (String) paramBag.getOperands().get(1);
+        String leftOperand = (String) getConverter().apply(paramBag.getOperands().get(0));
+        String rightOperand = (String) getConverter().apply(paramBag.getOperands().get(1));
+        int compare = getComparator().apply(leftOperand, rightOperand);
         switch (operator) {
             case gt:
-                return StrUtil.compare(leftOperand, rightOperand) > 0;
+                return compare > 0;
             case gte:
-                return StrUtil.compare(leftOperand, rightOperand) >= 0;
+                return compare >= 0;
             case lt:
-                return StrUtil.compare(leftOperand, rightOperand) < 0;
+                return compare < 0;
             case lte:
-                return StrUtil.compare(leftOperand, rightOperand) <= 0;
+                return compare <= 0;
             case equal:
-                return StrUtil.compare(leftOperand, rightOperand) == 0;
+                return compare == 0;
             case ne:
-                return StrUtil.compare(leftOperand, rightOperand) != 0;
+                return compare != 0;
             case start_with:
                 return leftOperand != null && rightOperand != null && leftOperand.startsWith(rightOperand);
             case end_with:

@@ -8,6 +8,8 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * @author LI Mengxiang <limengxiang876@gmail.com>
+ *
  * 逻辑表达式抽象，例如
  * a > b and b == c and c contain d
  * 不支持逻辑操作符混排，如

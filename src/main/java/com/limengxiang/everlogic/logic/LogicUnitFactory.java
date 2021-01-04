@@ -4,17 +4,18 @@ import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.LogicUnit;
 import com.limengxiang.everlogic.logic.array.NumberArrLogic;
 import com.limengxiang.everlogic.logic.array.StringArrLogic;
-import com.limengxiang.everlogic.logic.bool.BoolLogic;
-import com.limengxiang.everlogic.logic.json.JSONLogic;
-import com.limengxiang.everlogic.logic.number.NumberLogic;
-import com.limengxiang.everlogic.logic.string.StringLogic;
 
+/**
+ * @author LI Mengxiang <limengxiang876@gmail.com>
+ *
+ */
 public class LogicUnitFactory {
 
     private static final NumberLogic numberLogic;
     private static final StringLogic stringLogic;
     private static final BoolLogic boolLogic;
     private static final JSONLogic jsonLogic;
+    private static final DateLogic dateLogic;
     private static final StringArrLogic strArrLogic;
     private static final NumberArrLogic numArrLogic;
 
@@ -23,6 +24,7 @@ public class LogicUnitFactory {
         stringLogic = new StringLogic();
         boolLogic = new BoolLogic();
         jsonLogic = new JSONLogic();
+        dateLogic = new DateLogic();
         strArrLogic = new StringArrLogic();
         numArrLogic = new NumberArrLogic();
     }
@@ -37,6 +39,8 @@ public class LogicUnitFactory {
                 return boolLogic;
             case json:
                 return jsonLogic;
+            case date:
+                return dateLogic;
             case numArr:
                 return numArrLogic;
             case strArr:

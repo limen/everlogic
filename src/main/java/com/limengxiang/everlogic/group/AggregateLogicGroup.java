@@ -6,6 +6,8 @@ import lombok.Data;
 import java.util.List;
 
 /**
+ * @author LI Mengxiang <limengxiang876@gmail.com>
+ *
  * 聚合逻辑表达式，由多个
  * @see LogicGroup
  * 例如

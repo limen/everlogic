@@ -1,11 +1,16 @@
-package com.limengxiang.everlogic.util;
+package com.limengxiang.everlogic.comparator;
 
-import java.util.ArrayList;
-import java.util.List;
+/**
+ * @author LI Mengxiang <limengxiang876@gmail.com>
+ */
+public class StringComparator implements Comparator {
 
-public class StrUtil {
+    @Override
+    public int apply(Object var0, Object var1) {
+        return compare((String) var0, (String) var1);
+    }
 
-    public static int compare(String s1, String s2) {
+    private int compare(String s1, String s2) {
         if (s1 == null && s2 == null) {
             return 0;
         }
@@ -18,15 +23,7 @@ public class StrUtil {
         return compareChars(s1, s2);
     }
 
-    public static List<String> toStringList(List list) {
-        List<String> strings = new ArrayList<>();
-        for (Object v : list) {
-            strings.add(String.valueOf(v));
-        }
-        return strings;
-    }
-
-    private static int compareChars(String s1, String s2) {
+    private int compareChars(String s1, String s2) {
         char[] seq1 = s1.toCharArray();
         char[] seq2 = s2.toCharArray();
         int i = Math.min(seq1.length, seq2.length);

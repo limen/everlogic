@@ -1,7 +1,7 @@
 import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.OperatorConst;
 import com.limengxiang.everlogic.ParamTypeEnum;
-import com.limengxiang.everlogic.logic.string.StringLogic;
+import com.limengxiang.everlogic.logic.StringLogic;
 import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.Test;

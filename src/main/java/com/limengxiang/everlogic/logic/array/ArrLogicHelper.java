@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author LI Mengxiang <limengxiang876@gmail.com>
+ *
+ */
 public class ArrLogicHelper {
 
     public static boolean contains(List leftList, List rightList) {

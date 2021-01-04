@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * @author LI Mengxiang <limengxiang876@gmail.com>
  * 逻辑运算抽象
  * 支持如下逻辑运算：
  * - 数字：a > b, a < b, a == b, a != b
@@ -25,21 +26,14 @@ public final class LogicParamBag {
 
     private List<Object> operands;
 
-    private List<String> operandTypes;
-
     public LogicParamBag() {
         operands = new ArrayList<>();
-        operandTypes = new ArrayList<>();
     }
 
     public LogicParamBag(ParamTypeEnum paramType, String operator, List<Object> operands) {
         this.paramType = paramType;
         this.operator = operator;
         this.operands = operands;
-    }
-
-    public String getOperandType(int index) {
-        return operandTypes.get(index);
     }
 
     public Object getOperand(int index) {

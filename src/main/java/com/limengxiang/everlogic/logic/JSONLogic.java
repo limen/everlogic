@@ -1,7 +1,8 @@
-package com.limengxiang.everlogic.logic.json;
+package com.limengxiang.everlogic.logic;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -9,12 +10,17 @@ import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.LogicUnit;
 import com.limengxiang.everlogic.OperatorConst;
 import com.limengxiang.everlogic.ParamTypeEnum;
-import com.limengxiang.everlogic.logic.LogicFacade;
 import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
+/**
+ * @author LI Mengxiang <limengxiang876@gmail.com>
+ *
+ */
 public class JSONLogic implements LogicUnit {
 
     private static final ObjectMapper objectMapper;
@@ -117,6 +123,9 @@ public class JSONLogic implements LogicUnit {
         if (v instanceof Boolean || v instanceof BooleanNode) {
             return ParamTypeEnum.bool;
         }
+        if (v instanceof ArrayNode) {
+            return ParamTypeEnum.strArr;
+        }
         return null;
     }
 
@@ -132,6 +141,14 @@ public class JSONLogic implements LogicUnit {
         }
         if (v instanceof BooleanNode) {
             return ((BooleanNode) v).booleanValue();
+        }
+        if (v instanceof ArrayNode) {
+            Iterator<JsonNode> elements = ((ArrayNode) v).elements();
+            List<String> strings = new ArrayList<>();
+            while (elements.hasNext()) {
+                strings.add(elements.next().asText());
+            }
+            return strings;
         }
         return null;
     }

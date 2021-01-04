@@ -1,13 +1,31 @@
 package com.limengxiang.everlogic.logic.array;
 
 import com.limengxiang.everlogic.LogicParamBag;
-import com.limengxiang.everlogic.LogicUnit;
-import com.limengxiang.everlogic.util.NumUtil;
+import com.limengxiang.everlogic.comparator.Comparator;
+import com.limengxiang.everlogic.comparator.NumberComparator;
+import com.limengxiang.everlogic.converter.Converter;
+import com.limengxiang.everlogic.converter.NumberConverter;
+import com.limengxiang.everlogic.logic.AbstractLogicUnit;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class NumberArrLogic implements LogicUnit {
+/**
+ * @author LI Mengxiang <limengxiang876@gmail.com>
+ *
+ */
+public class NumberArrLogic extends AbstractLogicUnit {
+
+    @Override
+    public Converter getDefaultConverter() {
+        return new NumberConverter();
+    }
+
+    @Override
+    public Comparator getDefaultComparator() {
+        return new NumberComparator();
+    }
 
     private enum NumberArrOperator {
         equal,
@@ -44,8 +62,8 @@ public class NumberArrLogic implements LogicUnit {
         if (!(paramBag.getOperand(1) instanceof List)) {
             return false;
         }
-        List<Double> leftList = NumUtil.toDoubleList((List) paramBag.getOperand(0));
-        List<Double> rightList = NumUtil.toDoubleList((List) paramBag.getOperand(1));
+        List<Double> leftList = toDoubleList(paramBag.getOperand(0));
+        List<Double> rightList = toDoubleList(paramBag.getOperand(1));
         if (leftList.size() != rightList.size()) {
             return false;
         }
@@ -61,8 +79,17 @@ public class NumberArrLogic implements LogicUnit {
         if (!(operand1 instanceof List)) {
             return ((List) operand0).contains(operand1);
         }
-        List<Double> leftList = NumUtil.toDoubleList((List) operand0);
-        List<Double> rightList = NumUtil.toDoubleList((List) operand1);
+        List<Double> leftList = toDoubleList(operand0);
+        List<Double> rightList = toDoubleList(operand1);
         return ArrLogicHelper.contains(leftList, rightList);
+    }
+
+    private List<Double> toDoubleList(Object operand) throws Exception {
+        List<Double> doubles = new ArrayList<>();
+        Converter converter = getConverter();
+        for (Object v : (List) operand) {
+            doubles.add((Double) converter.apply(v));
+        }
+        return doubles;
     }
 }

@@ -11,6 +11,7 @@
 
 - 字符串
 - 数字
+- 日期
 - 布尔
 - JSON
 - 字符串数组
@@ -20,7 +21,7 @@
 
 - equal: 全部类型
 - ne: 全部类型
-- gt: 数字、字符串
+- gt: 数字，字符串，日期，布尔
 - gte: 同gt
 - lt: 同gt
 - lte: 同gt
@@ -35,7 +36,7 @@
 
 - 数字
 - 字符串
-- 数字数组
+- 数字数组(当成字符串数组处理)
 - 字符串数组
 - 布尔
 
@@ -62,6 +63,10 @@
 
 [NumberLogicTest](https://github.com/limen/everlogic/tree/master/src/test/java/NumberLogicTest.java)
 
+### 日期
+
+[DateLogicTest](https://github.com/limen/everlogic/tree/master/src/test/java/DateLogicTest.java)
+
 ### JSON
 
 [JSONLogicTest](https://github.com/limen/everlogic/tree/master/src/test/java/JSONLogicTest.java)
@@ -73,3 +78,20 @@
 ### 数字数组
 
 [NumberArrLogicTest](https://github.com/limen/everlogic/tree/master/src/test/java/NumberArrLogicTest.java)
+
+## Converter
+
+将参数转为特定类型，如
+
+- StringConverter 将参数转为String类型
+- NumberConverter 将参数转为Double类型
+- DateConverter 将参数转为Date类型
+
+## Comparator
+
+比较参数值，如
+
+- StringComparator 比较String类型变量
+- NumberComparator 比较Double类型变量
+- DateComparator 比较Date类型变量
+- CalenderComparator 增强了DateComparator，可指定比较的字段，如只比较年、月、日

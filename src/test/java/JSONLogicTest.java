@@ -1,7 +1,7 @@
 import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.OperatorConst;
 import com.limengxiang.everlogic.ParamTypeEnum;
-import com.limengxiang.everlogic.logic.json.JSONLogic;
+import com.limengxiang.everlogic.logic.JSONLogic;
 import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.Test;
@@ -95,6 +95,18 @@ public class JSONLogicTest {
         Assert.assertTrue(logic.process(paramBag));
         json2 = "{\"name\":\"alice\",\"num\":123}";
         paramBag.setOperands(Arrays.asList(json1, json2));
+        Assert.assertTrue(logic.process(paramBag));
+    }
+
+    @SneakyThrows
+    @Test
+    public void testArrayNode() {
+        String json1 = "{\"num\":123, \"names\":[1,2,3]}";
+        String json2 = "{\"num\":123, \"names\":[1,2,3]}";
+        JSONLogic logic = new JSONLogic();
+        LogicParamBag paramBag = new LogicParamBag(ParamTypeEnum.json, OperatorConst.EQUAL, Arrays.asList(json1, json2));
+        Assert.assertTrue(logic.process(paramBag));
+        paramBag = new LogicParamBag(ParamTypeEnum.json, OperatorConst.INSIDE, Arrays.asList(json1, json2));
         Assert.assertTrue(logic.process(paramBag));
     }
 }
