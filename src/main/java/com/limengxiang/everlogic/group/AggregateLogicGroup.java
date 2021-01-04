@@ -1,6 +1,9 @@
 package com.limengxiang.everlogic.group;
 
 import com.limengxiang.everlogic.LogicOperatorEnum;
+import com.limengxiang.everlogic.LogicResult;
+import com.limengxiang.everlogic.logic.LogicUnitFactoryContainer;
+import com.limengxiang.everlogic.util.LogicUtil;
 import lombok.Data;
 
 import java.util.List;
@@ -16,35 +19,36 @@ import java.util.List;
 @Data
 public class AggregateLogicGroup {
 
-    private LogicOperatorEnum logicOperator;
-    private List<LogicGroup> groups;
+    protected LogicOperatorEnum logicOperator;
+    protected List<LogicGroup> groups;
+    protected LogicUnitFactoryContainer logicUnitFactoryContainer;
 
-    public AggregateLogicGroup() {}
+    public AggregateLogicGroup() {
+        logicUnitFactoryContainer = new LogicUnitFactoryContainer();
+    }
 
     public AggregateLogicGroup(LogicOperatorEnum logicOperator, List<LogicGroup> groups) {
         this.logicOperator = logicOperator;
         this.groups = groups;
+        logicUnitFactoryContainer = new LogicUnitFactoryContainer();
+    }
+
+    public AggregateLogicGroup(LogicOperatorEnum logicOperator, List<LogicGroup> groups, LogicUnitFactoryContainer logicUnitFactory) {
+        this.logicOperator = logicOperator;
+        this.groups = groups;
+        this.logicUnitFactoryContainer = logicUnitFactory;
     }
 
     public boolean process() throws Exception {
-        Boolean result = null;
+        LogicResult result = new LogicResult(null, true);
         for (LogicGroup group : groups) {
-            boolean logicResult = group.process();
-            if (logicOperator.equals(LogicOperatorEnum.and)) {
-                result = result == null ? logicResult : result && logicResult;
-                if (!result) {
-                    break;
-                }
-            } else if (logicOperator.equals(LogicOperatorEnum.or)) {
-                result = result == null ? logicResult : result || logicResult;
-                if (result) {
-                    break;
-                }
-            } else if (logicOperator.equals(LogicOperatorEnum.xor)) {
-                result = result == null ? logicResult : result != logicResult;
+            if (logicUnitFactoryContainer != null && group.getLogicUnitFactoryContainer() == null) {
+                group.setLogicUnitFactoryContainer(logicUnitFactoryContainer);
             }
+            boolean logicResult = group.process();
+            result = LogicUtil.binaryLogic(result.getResult(), logicResult, logicOperator);
         }
-        return result != null && result;
+        return result.getResult() != null && result.getResult();
     }
 
 }

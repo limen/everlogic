@@ -5,7 +5,6 @@ import com.limengxiang.everlogic.comparator.Comparator;
 import com.limengxiang.everlogic.comparator.NumberComparator;
 import com.limengxiang.everlogic.converter.Converter;
 import com.limengxiang.everlogic.converter.NumberConverter;
-import com.limengxiang.everlogic.logic.AbstractLogicUnit;
 
 /**
  * @author LI Mengxiang <limengxiang876@gmail.com>

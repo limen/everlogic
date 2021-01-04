@@ -11,7 +11,9 @@ public abstract class AbstractLogicUnit implements LogicUnit {
 
     protected Converter converter;
 
-    private Comparator comparator;
+    protected Comparator comparator;
+
+    public AbstractLogicUnit() {}
 
     public Converter getConverter() {
         if (converter == null) {

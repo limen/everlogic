@@ -1,7 +1,7 @@
 package com.limengxiang.everlogic.logic;
 
-import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.LogicUnit;
+import com.limengxiang.everlogic.ParamTypeEnum;
 import com.limengxiang.everlogic.logic.array.NumberArrLogic;
 import com.limengxiang.everlogic.logic.array.StringArrLogic;
 
@@ -11,42 +11,35 @@ import com.limengxiang.everlogic.logic.array.StringArrLogic;
  */
 public class LogicUnitFactory {
 
-    private static final NumberLogic numberLogic;
-    private static final StringLogic stringLogic;
-    private static final BoolLogic boolLogic;
-    private static final JSONLogic jsonLogic;
-    private static final DateLogic dateLogic;
-    private static final StringArrLogic strArrLogic;
-    private static final NumberArrLogic numArrLogic;
+    private LogicUnitFactoryContainer container;
 
-    static {
-        numberLogic = new NumberLogic();
-        stringLogic = new StringLogic();
-        boolLogic = new BoolLogic();
-        jsonLogic = new JSONLogic();
-        dateLogic = new DateLogic();
-        strArrLogic = new StringArrLogic();
-        numArrLogic = new NumberArrLogic();
+    public void setContainer(LogicUnitFactoryContainer container) {
+        this.container = container;
     }
 
-    public static LogicUnit getLogicUnit(LogicParamBag paramBag) throws Exception {
-        switch (paramBag.getParamType()) {
+    public LogicUnit getLogicUnit(Object paramType) {
+        if (!(paramType instanceof ParamTypeEnum)) {
+            return null;
+        }
+        switch ((ParamTypeEnum) paramType) {
             case number:
-                return numberLogic;
+                return new NumberLogic();
             case string:
-                return stringLogic;
+                return new StringLogic();
             case bool:
-                return boolLogic;
+                return new BoolLogic();
             case json:
+                JSONLogic jsonLogic = new JSONLogic();
+                jsonLogic.setLogicUnitFactoryContainer(container);
                 return jsonLogic;
             case date:
-                return dateLogic;
+                return new DateLogic();
             case numArr:
-                return numArrLogic;
+                return new NumberArrLogic();
             case strArr:
-                return strArrLogic;
+                return new StringArrLogic();
             default:
-                throw new Exception("Unsupported param type:" + paramBag.getParamType());
+                return null;
         }
     }
 }

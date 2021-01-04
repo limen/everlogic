@@ -95,3 +95,17 @@
 - NumberComparator 比较Double类型变量
 - DateComparator 比较Date类型变量
 - CalenderComparator 增强了DateComparator，可指定比较的字段，如只比较年、月、日
+
+## 修改
+
+- 实现自己的逻辑单元，如继承DateLogic
+- 继承并修改 LogicUnitFactory
+- 注册 LogicUnitFactory，见 LogicUnitFactoryContainer, LogicGroup.logicUnitFactoryContainer, AggregateLogicGroup.logicUnitFactoryContainer
+
+## 扩展
+
+- 实现一个逻辑单元, 如 LongitudeLogic
+- 定义新的 LogicUnitFactory
+- 注册 LogicUnitFactory，见 LogicUnitFactoryContainer, LogicGroup.logicUnitFactoryContainer, AggregateLogicGroup.logicUnitFactoryContainer
+
+

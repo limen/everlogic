@@ -7,9 +7,10 @@ import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.limengxiang.everlogic.LogicParamBag;
-import com.limengxiang.everlogic.LogicUnit;
 import com.limengxiang.everlogic.OperatorConst;
 import com.limengxiang.everlogic.ParamTypeEnum;
+import com.limengxiang.everlogic.comparator.Comparator;
+import com.limengxiang.everlogic.converter.Converter;
 import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 
 import java.util.ArrayList;
@@ -21,12 +22,24 @@ import java.util.List;
  * @author LI Mengxiang <limengxiang876@gmail.com>
  *
  */
-public class JSONLogic implements LogicUnit {
+public class JSONLogic extends AbstractLogicUnit {
 
     private static final ObjectMapper objectMapper;
 
-    static {
-        objectMapper = new ObjectMapper();
+    private LogicUnitFactoryContainer logicUnitFactoryContainer;
+
+    public JSONLogic() {
+        logicUnitFactoryContainer = new LogicUnitFactoryContainer();
+    }
+
+    @Override
+    public Converter getDefaultConverter() {
+        return null;
+    }
+
+    @Override
+    public Comparator getDefaultComparator() {
+        return null;
     }
 
     private enum JSONOperator {
@@ -34,6 +47,18 @@ public class JSONLogic implements LogicUnit {
         ne,
         contain,
         inside,
+    }
+
+    static {
+        objectMapper = new ObjectMapper();
+    }
+
+    public LogicUnitFactoryContainer getLogicUnitFactoryContainer() {
+        return logicUnitFactoryContainer;
+    }
+
+    public void setLogicUnitFactoryContainer(LogicUnitFactoryContainer logicUnitFactoryContainer) {
+        this.logicUnitFactoryContainer = logicUnitFactoryContainer;
     }
 
     @Override
@@ -110,7 +135,7 @@ public class JSONLogic implements LogicUnit {
             return false;
         }
         LogicParamBag paramBag = new LogicParamBag(type0, OperatorConst.EQUAL, Arrays.asList(getValue(var0), getValue(var1)));
-        return LogicFacade.process(paramBag);
+        return logicUnitFactoryContainer.getLogicUnit(paramBag.getParamType()).process(paramBag);
     }
 
     private ParamTypeEnum inferParamType(Object v) {
