@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 public final class LogicParamBag {
 
-    private ParamTypeEnum paramType;
+    private Object paramType;
 
     /**
      * @see OperatorConst

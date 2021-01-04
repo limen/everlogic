@@ -12,21 +12,21 @@ import java.util.List;
 @Data
 public class LogicUnitFactoryContainer {
 
-    private List<LogicUnitFactory> factories;
+    private List<AbstractLogicUnitFactory> factories;
 
     public LogicUnitFactoryContainer() {
         factories = new ArrayList<>();
         factories.add(new LogicUnitFactory());
     }
 
-    public void addFactory(LogicUnitFactory factory) {
+    public void addFactory(AbstractLogicUnitFactory factory) {
         factory.setContainer(this);
         factories.add(factory);
     }
 
     public LogicUnit getLogicUnit(Object id) throws Exception {
         LogicUnit logicUnit = null;
-        for (LogicUnitFactory factory : factories) {
+        for (AbstractLogicUnitFactory factory : factories) {
             logicUnit = factory.getLogicUnit(id);
             if (logicUnit != null) {
                 break;

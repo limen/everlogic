@@ -9,7 +9,7 @@ import com.limengxiang.everlogic.logic.array.StringArrLogic;
  * @author LI Mengxiang <limengxiang876@gmail.com>
  *
  */
-public class LogicUnitFactory {
+public class LogicUnitFactory extends AbstractLogicUnitFactory {
 
     private LogicUnitFactoryContainer container;
 
