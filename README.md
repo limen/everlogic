@@ -7,6 +7,12 @@
 - 逻辑表达式，如 a>b and b==2 and c!=d，a>b or b==2 or c!=d
 - 聚合逻辑表达式，如 (a>b and b==2 and c!=d) and (a1>b1 or b1==2 or c1!=d1) and (a2>b2 xor b2==2 xor c2!=d2) 
 
+易于扩展
+
+- 自定义类型转换
+- 自定义比较运算
+- 自定义逻辑运算
+
 ## 支持的数据类型
 
 - 字符串
@@ -16,6 +22,11 @@
 - JSON
 - 字符串数组
 - 数字数组
+
+数组类型支持
+
+- Iterator
+- Collection
 
 ## 操作符
 

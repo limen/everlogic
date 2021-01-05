@@ -7,9 +7,7 @@ import com.limengxiang.everlogic.converter.Converter;
 import com.limengxiang.everlogic.converter.StringConverter;
 import com.limengxiang.everlogic.logic.AbstractLogicUnit;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author LI Mengxiang <limengxiang876@gmail.com>
@@ -85,9 +83,28 @@ public class StringArrLogic extends AbstractLogicUnit {
     }
 
     private List<String> toStringList(Object operand) throws Exception {
+        if (operand instanceof Iterator) {
+            return toStringList((Iterator) operand);
+        }
+        if (operand instanceof Collection) {
+            return toStringList((Collection) operand);
+        }
+        throw new Exception("Unsupported array type:" + operand.getClass());
+    }
+
+    private List<String> toStringList(Iterator operand) throws Exception {
         List<String> strings = new ArrayList<>();
         Converter converter = getConverter();
-        for (Object v : (List) operand) {
+        while (operand.hasNext()) {
+            strings.add((String) converter.apply(operand.next()));
+        }
+        return strings;
+    }
+
+    private List<String> toStringList(Collection operand) throws Exception {
+        List<String> strings = new ArrayList<>();
+        Converter converter = getConverter();
+        for (Object v : operand) {
             strings.add((String) converter.apply(v));
         }
         return strings;
