@@ -7,24 +7,28 @@ package com.limengxiang.everlogic;
 public class LogicEvaluator {
 
     protected LogicUnitFactoryContainer logicUnitFactoryContainer;
-    protected IRegExCache regExCache;
+    protected IReContainer reContainer;
 
     public LogicEvaluator() {
         logicUnitFactoryContainer = new LogicUnitFactoryContainer();
         logicUnitFactoryContainer.setEvaluator(this);
-        regExCache = new DefaultRegExCache();
+        reContainer = new DefaultReContainer();
     }
 
     public void addLogicUnitFactory(ILogicUnitFactory factory) {
         logicUnitFactoryContainer.addFactory(factory);
     }
 
-    public void setRegExCache(IRegExCache cache) {
-        regExCache = cache;
+    public void setReContainer(IReContainer cache) {
+        reContainer = cache;
     }
 
-    public IRegExCache getRegExCache() {
-        return regExCache;
+    public IReContainer getReContainer() {
+        return reContainer;
+    }
+
+    public void setLogicUnitFactoryContainer(LogicUnitFactoryContainer container) {
+        logicUnitFactoryContainer = container;
     }
 
     public LogicUnitFactoryContainer getLogicUnitFactoryContainer() {

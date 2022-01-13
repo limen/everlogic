@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class LogicGroupTest {
+public class LogicRuleTest {
 
     @Test
     public void testNumberGroup() {
@@ -52,6 +52,13 @@ public class LogicGroupTest {
         ruleDepth5.setRules(Arrays.asList(ruleDepth3, ruleDepth3, ruleDepth4));
         Assert.assertTrue(logicEvaluator.eval(ruleDepth5));
 
+        pp.setRules(Arrays.asList(p1, p2, p3));
+        ruleDepth3.setRules(Collections.singletonList(pp));
+        Assert.assertFalse(logicEvaluator.eval(ruleDepth3));
+        ruleDepth4.setRules(Arrays.asList(ruleDepth3, ruleDepth3));
+        Assert.assertFalse(logicEvaluator.eval(ruleDepth4));
+        ruleDepth5.setRules(Arrays.asList(ruleDepth3, ruleDepth3, ruleDepth4));
+        Assert.assertFalse(logicEvaluator.eval(ruleDepth5));
         System.out.println(JSONUtil.stringify(ruleDepth5));
     }
 }

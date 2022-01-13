@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class DefaultRegExCache implements IRegExCache {
+public class DefaultReContainer implements IReContainer {
 
     private Map<String, Pattern> cachePool;
 
     private int capacity;
 
-    public DefaultRegExCache() {
+    public DefaultReContainer() {
         cachePool = new HashMap<>();
         capacity = 1000;
     }

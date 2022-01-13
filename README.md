@@ -60,7 +60,7 @@
 
 ### 逻辑表达式
 
-[LogicGroupTest](https://github.com/limen/everlogic/tree/master/src/test/java/LogicGroupTest.java)
+[LogicRuleTest](https://github.com/limen/everlogic/tree/master/src/test/java/LogicRuleTest.java)
 
 ### 聚合逻辑表达式
 

@@ -1,6 +1,8 @@
+import com.limengxiang.everlogic.FormatterConst;
 import com.limengxiang.everlogic.LogicRule;
 import com.limengxiang.everlogic.OperatorConst;
 import com.limengxiang.everlogic.OperandTypeEnum;
+import com.limengxiang.everlogic.formatter.StringFormatter;
 import com.limengxiang.everlogic.logic.StringLogic;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,6 +44,20 @@ public class StringLogicTest {
         Assert.assertTrue(stringLogic.process(OperatorConst.CONTAIN, Arrays.asList("123","23")));
         Assert.assertTrue(stringLogic.process(OperatorConst.INSIDE, Arrays.asList("123","123")));
         Assert.assertTrue(stringLogic.process(OperatorConst.INSIDE, Arrays.asList("123","1234")));
+    }
+
+    @Test
+    public void testFormatter() {
+        StringLogic stringLogic = new StringLogic();
+        StringFormatter formatter = new StringFormatter();
+        formatter.setType(FormatterConst.Strings.TYPE_LOWER);
+        stringLogic.setFormatter(formatter);
+        Assert.assertTrue(stringLogic.process(OperatorConst.EQUAL, Arrays.asList("hello", "HEllo")));
+
+        formatter.setType(FormatterConst.Strings.TYPE_SUB);
+        formatter.setArgs(Arrays.asList(0, 3));
+        Assert.assertTrue(stringLogic.process(OperatorConst.EQUAL, Arrays.asList("hello", "helLO")));
+        Assert.assertFalse(stringLogic.process(OperatorConst.EQUAL, Arrays.asList("hello", "heLLO")));
     }
 
 }

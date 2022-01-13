@@ -4,6 +4,8 @@ import com.limengxiang.everlogic.comparator.Comparator;
 import com.limengxiang.everlogic.comparator.StringComparator;
 import com.limengxiang.everlogic.converter.Converter;
 import com.limengxiang.everlogic.converter.StringConverter;
+import com.limengxiang.everlogic.formatter.Formatter;
+import com.limengxiang.everlogic.formatter.StringFormatter;
 import com.limengxiang.everlogic.util.StrUtil;
 
 import java.util.List;
@@ -66,6 +68,12 @@ public class StringLogic extends AbstractLogicUnit {
         }
 
         String rightOperand = (String) getConverter().apply(operands.get(1));
+
+        if (getFormatter() != null) {
+            leftOperand = ((Formatter<String>) getFormatter()).apply(leftOperand);
+            rightOperand = ((Formatter<String>) getFormatter()).apply(rightOperand);
+        }
+
         int compare = getComparator().apply(leftOperand, rightOperand);
         switch (opEnum) {
             case gt:
@@ -89,8 +97,8 @@ public class StringLogic extends AbstractLogicUnit {
             case inside:
                 return leftOperand != null && rightOperand != null && rightOperand.contains(leftOperand);
             case regex:
-                if (getEvaludator() != null) {
-                    return getEvaludator().getRegExCache().compile(rightOperand).matcher(leftOperand).matches();
+                if (getEvaluator() != null && getEvaluator().getReContainer() != null) {
+                    return getEvaluator().getReContainer().compile(rightOperand).matcher(leftOperand).matches();
                 }
                 return Pattern.compile(rightOperand).matcher(leftOperand).matches();
             default:

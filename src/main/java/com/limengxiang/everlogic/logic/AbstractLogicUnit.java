@@ -5,6 +5,7 @@ import com.limengxiang.everlogic.LogicEvaluator;
 import com.limengxiang.everlogic.LogicUnitFactoryContainer;
 import com.limengxiang.everlogic.comparator.Comparator;
 import com.limengxiang.everlogic.converter.Converter;
+import com.limengxiang.everlogic.formatter.Formatter;
 
 /**
  * @author LI Mengxiang <limengxiang876@gmail.com>
@@ -14,6 +15,8 @@ public abstract class AbstractLogicUnit implements ILogicUnit {
     protected Converter converter;
 
     protected Comparator comparator;
+
+    protected Formatter formatter;
 
     protected LogicEvaluator evaluator;
 
@@ -53,8 +56,16 @@ public abstract class AbstractLogicUnit implements ILogicUnit {
         this.evaluator = evaluator;
     }
 
-    public LogicEvaluator getEvaludator() {
+    public LogicEvaluator getEvaluator() {
         return evaluator;
+    }
+
+    public Formatter getFormatter() {
+        return formatter;
+    }
+
+    public void setFormatter(Formatter formatter) {
+        this.formatter = formatter;
     }
 
     public LogicUnitFactoryContainer getLogicUnitFactoryContainer() {

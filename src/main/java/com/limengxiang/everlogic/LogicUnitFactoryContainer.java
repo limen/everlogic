@@ -37,7 +37,7 @@ public class LogicUnitFactoryContainer {
             }
         }
         if (logicUnit == null) {
-            throw new RuntimeException("Unsupported condition unit id:" + id);
+            throw new RuntimeException("Unsupported logic unit:" + id);
         }
 
         if (logicUnit instanceof AbstractLogicUnit) {
