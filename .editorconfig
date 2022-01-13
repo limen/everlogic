@@ -1,0 +1,4 @@
+[*.java]
+tab_width = 4
+indent_style = space
+end_of_line = lf

@@ -1,85 +1,57 @@
-import com.limengxiang.everlogic.LogicParamBag;
-import com.limengxiang.everlogic.LogicOperatorEnum;
-import com.limengxiang.everlogic.OperatorConst;
-import com.limengxiang.everlogic.ParamTypeEnum;
-import com.limengxiang.everlogic.group.LogicGroup;
-import lombok.SneakyThrows;
+import com.limengxiang.everlogic.*;
+import com.limengxiang.everlogic.util.JSONUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class LogicGroupTest {
 
-    @SneakyThrows
     @Test
     public void testNumberGroup() {
-        LogicParamBag p1 = new LogicParamBag();
-        p1.setParamType(ParamTypeEnum.number);
+        LogicRule p1 = new LogicRule();
+        p1.setParamType(OperandTypeEnum.number);
         p1.setOperator(OperatorConst.EQUAL);
         p1.setOperands(Arrays.asList(1000, 1000.0));
-        LogicParamBag p2 = new LogicParamBag();
-        p2.setParamType(ParamTypeEnum.number);
+        LogicRule p2 = new LogicRule();
+        p2.setParamType(OperandTypeEnum.number);
         p2.setOperator(OperatorConst.GREATER_THAN);
         p2.setOperands(Arrays.asList(1000, 1000.0));
-        LogicParamBag p3 = new LogicParamBag();
-        p3.setParamType(ParamTypeEnum.number);
+        LogicRule p3 = new LogicRule();
+        p3.setParamType(OperandTypeEnum.number);
         p3.setOperator(OperatorConst.GREATER_THAN_OR_EQUAL);
         p3.setOperands(Arrays.asList("1000", "999.9"));
+        LogicRule p4 = new LogicRule();
+        p4.setParamType(OperandTypeEnum.number);
+        p4.setOperator(OperatorConst.EQUAL);
+        p4.setOperands(Arrays.asList("1000", "1000.0"));
 
-        LogicGroup logicGroup = new LogicGroup();
-        logicGroup.setLogicOperator(LogicOperatorEnum.and);
-        logicGroup.setParamBags(Arrays.asList(p1, p2));
-        Assert.assertFalse(logicGroup.process());
+        LogicRule pp = new LogicRule();
+        pp.setCondition(LogicConditionEnum.and);
+        pp.setRules(Arrays.asList(p1, p2, p3));
 
-        logicGroup.setLogicOperator(LogicOperatorEnum.or);
-        Assert.assertTrue(logicGroup.process());
+        LogicEvaluator logicEvaluator = new LogicEvaluator();
+        Assert.assertFalse(logicEvaluator.eval(pp));
 
-        logicGroup.setLogicOperator(LogicOperatorEnum.xor);
-        Assert.assertTrue(logicGroup.process());
+        pp.setRules(Arrays.asList(p1, p3));
+        Assert.assertTrue(logicEvaluator.eval(pp));
 
-        logicGroup.setLogicOperator(LogicOperatorEnum.and);
-        logicGroup.setParamBags(Arrays.asList(p1, p2, p3));
-        Assert.assertFalse(logicGroup.process());
-        logicGroup.setLogicOperator(LogicOperatorEnum.or);
-        Assert.assertTrue(logicGroup.process());
-        logicGroup.setLogicOperator(LogicOperatorEnum.xor);
-        Assert.assertFalse(logicGroup.process());
-    }
+        pp.setRules(Arrays.asList(p1, p3, p4));
+        Assert.assertTrue(logicEvaluator.eval(pp));
 
-    @SneakyThrows
-    @Test
-    public void testStringGroup() {
-        LogicParamBag p1 = new LogicParamBag();
-        p1.setParamType(ParamTypeEnum.string);
-        p1.setOperator(OperatorConst.EQUAL);
-        p1.setOperands(Arrays.asList("abc", "abc"));
-        LogicParamBag p2 = new LogicParamBag();
-        p2.setParamType(ParamTypeEnum.string);
-        p2.setOperator(OperatorConst.GREATER_THAN);
-        p2.setOperands(Arrays.asList("abc", "abcd"));
-        LogicParamBag p3 = new LogicParamBag();
-        p3.setParamType(ParamTypeEnum.string);
-        p3.setOperator(OperatorConst.START_WITH);
-        p3.setOperands(Arrays.asList("abcd", "abc"));
+        LogicRule ruleDepth3 = new LogicRule();
+        ruleDepth3.setRules(Collections.singletonList(pp));
+        Assert.assertTrue(logicEvaluator.eval(ruleDepth3));
 
-        LogicGroup logicGroup = new LogicGroup();
-        logicGroup.setLogicOperator(LogicOperatorEnum.and);
-        logicGroup.setParamBags(Arrays.asList(p1, p2));
-        Assert.assertFalse(logicGroup.process());
+        LogicRule ruleDepth4 = new LogicRule();
+        ruleDepth4.setRules(Arrays.asList(ruleDepth3, ruleDepth3));
+        Assert.assertTrue(logicEvaluator.eval(ruleDepth4));
 
-        logicGroup.setLogicOperator(LogicOperatorEnum.or);
-        Assert.assertTrue(logicGroup.process());
+        LogicRule ruleDepth5 = new LogicRule();
+        ruleDepth5.setRules(Arrays.asList(ruleDepth3, ruleDepth3, ruleDepth4));
+        Assert.assertTrue(logicEvaluator.eval(ruleDepth5));
 
-        logicGroup.setLogicOperator(LogicOperatorEnum.xor);
-        Assert.assertTrue(logicGroup.process());
-
-        logicGroup.setLogicOperator(LogicOperatorEnum.and);
-        logicGroup.setParamBags(Arrays.asList(p1, p2, p3));
-        Assert.assertFalse(logicGroup.process());
-        logicGroup.setLogicOperator(LogicOperatorEnum.or);
-        Assert.assertTrue(logicGroup.process());
-        logicGroup.setLogicOperator(LogicOperatorEnum.xor);
-        Assert.assertFalse(logicGroup.process());
+        System.out.println(JSONUtil.stringify(ruleDepth5));
     }
 }

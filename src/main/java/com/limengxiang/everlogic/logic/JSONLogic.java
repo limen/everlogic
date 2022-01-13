@@ -1,16 +1,18 @@
 package com.limengxiang.everlogic.logic;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.NumericNode;
 import com.fasterxml.jackson.databind.node.TextNode;
-import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.OperatorConst;
-import com.limengxiang.everlogic.ParamTypeEnum;
+import com.limengxiang.everlogic.OperandTypeEnum;
 import com.limengxiang.everlogic.comparator.Comparator;
 import com.limengxiang.everlogic.converter.Converter;
+import com.limengxiang.everlogic.util.JSONUtil;
+import com.limengxiang.everlogic.util.StrUtil;
 import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 
 import java.util.ArrayList;
@@ -26,12 +28,6 @@ public class JSONLogic extends AbstractLogicUnit {
 
     private static final ObjectMapper objectMapper;
 
-    private LogicUnitFactoryContainer logicUnitFactoryContainer;
-
-    public JSONLogic() {
-        logicUnitFactoryContainer = new LogicUnitFactoryContainer();
-    }
-
     @Override
     public Converter getDefaultConverter() {
         return null;
@@ -42,36 +38,39 @@ public class JSONLogic extends AbstractLogicUnit {
         return null;
     }
 
-    private enum JSONOperator {
+    private enum OpEnum {
         equal,
         ne,
         contain,
         inside,
+        nil,
+        not_nil,
     }
 
     static {
         objectMapper = new ObjectMapper();
     }
 
-    public LogicUnitFactoryContainer getLogicUnitFactoryContainer() {
-        return logicUnitFactoryContainer;
-    }
-
-    public void setLogicUnitFactoryContainer(LogicUnitFactoryContainer logicUnitFactoryContainer) {
-        this.logicUnitFactoryContainer = logicUnitFactoryContainer;
-    }
-
     @Override
-    public boolean process(LogicParamBag paramBag) throws Exception {
-        JSONOperator operator;
+    public boolean process(String op, List<Object> operands) {
+        OpEnum opEnum;
         try {
-            operator = JSONOperator.valueOf(paramBag.getOperator().toLowerCase());
+            opEnum = OpEnum.valueOf(op.toLowerCase());
         } catch (Exception ex) {
-            throw new Exception("Unsupported operator:" + paramBag.getOperator());
+            throw new RuntimeException("Unsupported operator:" + op);
         }
-        JsonNode leftJson = objectMapper.readValue((String) paramBag.getOperand(0), JsonNode.class);
-        JsonNode rightJson = objectMapper.readValue((String) paramBag.getOperand(1), JsonNode.class);
-        switch (operator) {
+
+        String content0 = (String) operands.get(0);
+        if (OpEnum.nil.equals(opEnum)) {
+            return StrUtil.isBlank(content0);
+        }
+
+        JsonNode leftJson = JSONUtil.parse(content0);
+        if (OpEnum.not_nil.equals(opEnum)) {
+            return leftJson != null;
+        }
+        JsonNode rightJson = JSONUtil.parse((String) operands.get(1));
+        switch (opEnum) {
             case equal:
                 return equal(leftJson, rightJson);
             case ne:
@@ -85,7 +84,7 @@ public class JSONLogic extends AbstractLogicUnit {
         }
     }
 
-    private boolean contain(JsonNode json1, JsonNode json2) throws Exception {
+    private boolean contain(JsonNode json1, JsonNode json2) {
         if (json1 == null) {
             return false;
         }
@@ -105,7 +104,7 @@ public class JSONLogic extends AbstractLogicUnit {
         return true;
     }
 
-    private boolean equal(JsonNode json1, JsonNode json2) throws Exception {
+    private boolean equal(JsonNode json1, JsonNode json2) {
         if (json1 == null && json2 == null) {
             return true;
         }
@@ -125,31 +124,32 @@ public class JSONLogic extends AbstractLogicUnit {
         return true;
     }
 
-    private boolean equals(Object var0, Object var1) throws Exception {
+    private boolean equals(Object var0, Object var1) {
         if (var0 == null && var1 == null) {
             return true;
         }
-        ParamTypeEnum type0 = inferParamType(var0);
-        ParamTypeEnum type1 = inferParamType(var1);
+        OperandTypeEnum type0 = inferParamType(var0);
+        OperandTypeEnum type1 = inferParamType(var1);
         if (type0 == null || !type0.equals(type1)) {
             return false;
         }
-        LogicParamBag paramBag = new LogicParamBag(type0, OperatorConst.EQUAL, Arrays.asList(getValue(var0), getValue(var1)));
-        return logicUnitFactoryContainer.getLogicUnit(paramBag.getParamType()).process(paramBag);
+        return logicUnitFactoryContainer.
+                getLogicUnit(type0).
+                process(OperatorConst.EQUAL, Arrays.asList(getValue(var0), getValue(var1)));
     }
 
-    private ParamTypeEnum inferParamType(Object v) {
+    private OperandTypeEnum inferParamType(Object v) {
         if (v instanceof Number || v instanceof NumericNode) {
-            return ParamTypeEnum.number;
+            return OperandTypeEnum.number;
         }
         if (v instanceof String || v instanceof StringNode || v instanceof TextNode) {
-            return ParamTypeEnum.string;
+            return OperandTypeEnum.string;
         }
         if (v instanceof Boolean || v instanceof BooleanNode) {
-            return ParamTypeEnum.bool;
+            return OperandTypeEnum.bool;
         }
         if (v instanceof ArrayNode) {
-            return ParamTypeEnum.strArr;
+            return OperandTypeEnum.str_arr;
         }
         return null;
     }

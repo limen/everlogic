@@ -1,7 +1,6 @@
 package converter;
 
 import com.limengxiang.everlogic.converter.BooleanConverter;
-import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,7 +9,6 @@ import org.junit.Test;
  */
 public class BooleanConverterTest {
 
-    @SneakyThrows
     @Test
     public void testApply() {
         BooleanConverter converter = new BooleanConverter();

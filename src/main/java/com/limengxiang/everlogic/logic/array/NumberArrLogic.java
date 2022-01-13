@@ -1,6 +1,5 @@
 package com.limengxiang.everlogic.logic.array;
 
-import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.comparator.Comparator;
 import com.limengxiang.everlogic.comparator.NumberComparator;
 import com.limengxiang.everlogic.converter.Converter;
@@ -25,7 +24,7 @@ public class NumberArrLogic extends AbstractLogicUnit {
         return new NumberComparator();
     }
 
-    private enum NumberArrOperator {
+    private enum OpEnum {
         equal,
         ne,
         contain,
@@ -33,35 +32,35 @@ public class NumberArrLogic extends AbstractLogicUnit {
     }
 
     @Override
-    public boolean process(LogicParamBag paramBag) throws Exception {
-        NumberArrOperator operator;
+    public boolean process(String op, List<Object> operands) {
+        OpEnum opEnum;
         try {
-            operator = NumberArrOperator.valueOf(paramBag.getOperator().toLowerCase());
+            opEnum = OpEnum.valueOf(op.toLowerCase());
         } catch (Exception ex) {
-            throw new Exception("Unsupported operator:" + paramBag.getOperator());
+            throw new RuntimeException("Unsupported operator:" + op);
         }
-        switch (operator) {
+        switch (opEnum) {
             case equal:
-                return equals(paramBag);
+                return equals(operands);
             case ne:
-                return !equals(paramBag);
+                return !equals(operands);
             case contain:
-                return contains(paramBag.getOperand(0), paramBag.getOperand(1));
+                return contains(operands.get(0), operands.get(1));
             case inside:
-                return contains(paramBag.getOperand(1), paramBag.getOperand(0));
+                return contains(operands.get(1), operands.get(0));
         }
         return false;
     }
 
-    private boolean equals(LogicParamBag paramBag) throws Exception {
-        if (!(paramBag.getOperand(0) instanceof List)) {
-            throw new Exception("Operand 0 must be a list");
+    private boolean equals(List<Object> operands) {
+        if (!(operands.get(0) instanceof List)) {
+            throw new RuntimeException("Operand#0 must be a list");
         }
-        if (!(paramBag.getOperand(1) instanceof List)) {
-            return false;
+        if (!(operands.get(1) instanceof List)) {
+            throw new RuntimeException("Operand#1 must be a list");
         }
-        List<Double> leftList = toDoubleList(paramBag.getOperand(0));
-        List<Double> rightList = toDoubleList(paramBag.getOperand(1));
+        List<Double> leftList = toDoubleList(operands.get(0));
+        List<Double> rightList = toDoubleList(operands.get(1));
         if (leftList.size() != rightList.size()) {
             return false;
         }
@@ -70,29 +69,29 @@ public class NumberArrLogic extends AbstractLogicUnit {
         return leftElemCount.equals(rightElemCount);
     }
 
-    private boolean contains(Object operand0, Object operand1) throws Exception {
+    private boolean contains(Object operand0, Object operand1) {
         if (!(operand0 instanceof List)) {
-            throw new Exception("Operand 0 must be a list");
+            throw new RuntimeException("Operand#0 must be a list");
         }
         if (!(operand1 instanceof List)) {
-            return ((List) operand0).contains(operand1);
+            throw new RuntimeException("Operand#0 must be a list");
         }
         List<Double> leftList = toDoubleList(operand0);
         List<Double> rightList = toDoubleList(operand1);
         return ArrLogicHelper.contains(leftList, rightList);
     }
 
-    private List<Double> toDoubleList(Object operand) throws Exception {
+    private List<Double> toDoubleList(Object operand) {
         if (operand instanceof Collection) {
             return toDoubleList((Collection) operand);
         }
         if (operand instanceof Iterator) {
             return toDoubleList((Iterator) operand);
         }
-        throw new Exception("Unsupported array type:" + operand.getClass());
+        throw new RuntimeException("Unsupported array type:" + operand.getClass());
     }
 
-    private List<Double> toDoubleList(Iterator iterator) throws Exception {
+    private List<Double> toDoubleList(Iterator iterator) {
         List<Double> doubles = new ArrayList<>();
         Converter converter = getConverter();
         while (iterator.hasNext()) {
@@ -101,7 +100,7 @@ public class NumberArrLogic extends AbstractLogicUnit {
         return doubles;
     }
 
-    private List<Double> toDoubleList(Collection list) throws Exception {
+    private List<Double> toDoubleList(Collection list) {
         List<Double> doubles = new ArrayList<>();
         Converter converter = getConverter();
         for (Object v : list) {

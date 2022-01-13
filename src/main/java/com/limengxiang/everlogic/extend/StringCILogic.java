@@ -1,12 +1,13 @@
 package com.limengxiang.everlogic.extend;
 
-import com.limengxiang.everlogic.LogicParamBag;
-import com.limengxiang.everlogic.LogicUnit;
+import com.limengxiang.everlogic.ILogicUnit;
+
+import java.util.List;
 
 /**
  * @author LI Mengxiang <limengxiang876@gmail.com>
  */
-public class StringCILogic implements LogicUnit {
+public class StringCILogic implements ILogicUnit {
 
     private enum Operator {
         equal,
@@ -14,15 +15,23 @@ public class StringCILogic implements LogicUnit {
     }
 
     @Override
-    public boolean process(LogicParamBag paramBag) throws Exception {
+    public boolean process(String op, List<Object> operands) {
         Operator operator;
         try {
-            operator = Operator.valueOf(paramBag.getOperator());
+            operator = Operator.valueOf(op);
         } catch (Exception ex) {
-            throw new Exception("Unsupported operator:" + paramBag.getOperator());
+            throw new RuntimeException("Unsupported operator:" + op);
         }
-        String left = ((String) paramBag.getOperand(0)).toLowerCase();
-        String right = ((String) paramBag.getOperand(1)).toLowerCase();
+        if (operands.get(0) == null && operands.get(1) == null) {
+            return true;
+        }
+        if (operands.get(0) == null || operands.get(1) == null) {
+            return false;
+        }
+        String s0 = (String) operands.get(0);
+        String s1 = (String) operands.get(1);
+        String left = s0.toLowerCase();
+        String right = s1.toLowerCase();
         switch (operator) {
             case equal:
                 return left.equals(right);

@@ -1,12 +1,12 @@
 package com.limengxiang.everlogic.logic;
 
-import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.comparator.Comparator;
 import com.limengxiang.everlogic.comparator.DateComparator;
 import com.limengxiang.everlogic.converter.Converter;
 import com.limengxiang.everlogic.converter.DateConverter;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author LI Mengxiang <limengxiang876@gmail.com>
@@ -22,28 +22,38 @@ public class DateLogic extends AbstractLogicUnit {
         return new DateComparator();
     }
 
-    private enum Operator {
+    private enum OpEnum {
         equal,
         ne,
         lt,
         lte,
         gt,
-        gte
+        gte,
+        nil,
+        not_nil,
     }
 
     @Override
-    public boolean process(LogicParamBag paramBag) throws Exception {
-        Operator operator;
+    public boolean process(String op, List<Object> operands) {
+        OpEnum opEnum;
         try {
-            operator = Operator.valueOf(paramBag.getOperator().toLowerCase());
+            opEnum = OpEnum.valueOf(op.toLowerCase());
         } catch (Exception ex) {
-            throw new Exception("Unsupported operator:" + paramBag.getOperator());
+            throw new RuntimeException("Unsupported opEnum:" + op);
         }
 
-        Date operand0 = (Date) getConverter().apply(paramBag.getOperand(0));
-        Date operand1 = (Date) getConverter().apply(paramBag.getOperand(1));
+        Date operand0 = (Date) getConverter().apply(operands.get(0));
+
+        if (OpEnum.nil.equals(opEnum)) {
+            return operand0 == null;
+        }
+        if (OpEnum.not_nil.equals(opEnum)) {
+            return operand0 != null;
+        }
+
+        Date operand1 = (Date) getConverter().apply(operands.get(1));
         int compare = getComparator().apply(operand0, operand1);
-        switch (operator) {
+        switch (opEnum) {
             case equal:
                 return compare == 0;
             case ne:

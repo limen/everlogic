@@ -1,10 +1,11 @@
 package com.limengxiang.everlogic.logic;
 
-import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.comparator.Comparator;
 import com.limengxiang.everlogic.comparator.NumberComparator;
 import com.limengxiang.everlogic.converter.Converter;
 import com.limengxiang.everlogic.converter.NumberConverter;
+
+import java.util.List;
 
 /**
  * @author LI Mengxiang <limengxiang876@gmail.com>
@@ -22,27 +23,38 @@ public class NumberLogic extends AbstractLogicUnit {
         return new NumberComparator();
     }
 
-    private enum  NumberOperator {
+    private enum OpEnum {
         gt,
         gte,
         lt,
         lte,
         equal,
         ne,
+        nil,
+        not_nil,
     }
 
 
-    public boolean process(LogicParamBag paramBag) throws Exception {
-        NumberOperator operator;
+    public boolean process(String op, List<Object> operands) {
+        OpEnum opEnum;
         try {
-            operator = NumberOperator.valueOf(paramBag.getOperator().toLowerCase());
+            opEnum = OpEnum.valueOf(op.toLowerCase());
         } catch (Exception ex) {
-            throw new Exception("Unsupported operator:" + paramBag.getOperator());
+            throw new RuntimeException("Unsupported operator:" + op);
         }
-        Double leftOperand = (Double) getConverter().apply(paramBag.getOperands().get(0));
-        Double rightOperand = (Double) getConverter().apply(paramBag.getOperands().get(1));
+
+        Double leftOperand = (Double) getConverter().apply(operands.get(0));
+        Double rightOperand = operands.size() > 1 ? (Double) getConverter().apply(operands.get(1)) : null;
+
+        if (OpEnum.nil.equals(opEnum)) {
+            return leftOperand == null;
+        }
+        if (OpEnum.not_nil.equals(opEnum)) {
+            return leftOperand != null;
+        }
+
         int compare = getComparator().apply(leftOperand, rightOperand);
-        switch (operator) {
+        switch (opEnum) {
             case gt:
                 return compare > 0;
             case gte:

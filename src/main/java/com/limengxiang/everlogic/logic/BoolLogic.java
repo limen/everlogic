@@ -1,10 +1,11 @@
 package com.limengxiang.everlogic.logic;
 
-import com.limengxiang.everlogic.LogicParamBag;
 import com.limengxiang.everlogic.comparator.BooleanComparator;
 import com.limengxiang.everlogic.comparator.Comparator;
 import com.limengxiang.everlogic.converter.Converter;
 import com.limengxiang.everlogic.converter.BooleanConverter;
+
+import java.util.List;
 
 /**
  * @author LI Mengxiang <limengxiang876@gmail.com>
@@ -22,39 +23,27 @@ public class BoolLogic extends AbstractLogicUnit {
         return new BooleanComparator();
     }
 
-    private enum BoolOperator {
+    private enum OpEnum {
         equal,
         ne,
-        gt,
-        gte,
-        lt,
-        lte
     }
 
     @Override
-    public boolean process(LogicParamBag paramBag) throws Exception {
-        BoolOperator operator;
+    public boolean process(String op, List<Object> operands) {
+        OpEnum opEnum;
         try {
-            operator = BoolOperator.valueOf(paramBag.getOperator().toLowerCase());
+            opEnum = OpEnum.valueOf(op.toLowerCase());
         } catch (Exception ex) {
-            throw new Exception("Unsupported operator:" + paramBag.getOperator());
+            throw new RuntimeException("Unsupported operator:" + op);
         }
-        Boolean leftOperand = (Boolean) getConverter().apply(paramBag.getOperands().get(0));
-        Boolean rightOperand = (Boolean) getConverter().apply(paramBag.getOperands().get(1));
+        Boolean leftOperand = (Boolean) getConverter().apply(operands.get(0));
+        Boolean rightOperand = (Boolean) getConverter().apply(operands.get(1));
         int compare = getComparator().apply(leftOperand, rightOperand);
-        switch (operator) {
+        switch (opEnum) {
             case equal:
                 return compare == 0;
             case ne:
                 return compare != 0;
-            case gt:
-                return compare > 0;
-            case lt:
-                return compare < 0;
-            case gte:
-                return compare >= 0;
-            case lte:
-                return compare <= 0;
             default:
                 return false;
         }

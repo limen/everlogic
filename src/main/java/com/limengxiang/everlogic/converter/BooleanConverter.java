@@ -5,7 +5,7 @@ package com.limengxiang.everlogic.converter;
  */
 public class BooleanConverter implements Converter {
     @Override
-    public Boolean apply(Object var) throws Exception {
+    public Boolean apply(Object var) {
         if (var == null) {
             return false;
         }

@@ -4,12 +4,12 @@ package com.limengxiang.everlogic;
  * @author LI Mengxiang <limengxiang876@gmail.com>
  *
  */
-public enum ParamTypeEnum {
+public enum OperandTypeEnum {
     number,
     string,
     bool,
     json,
     date,
-    numArr,
-    strArr,
+    num_arr,
+    str_arr,
 }

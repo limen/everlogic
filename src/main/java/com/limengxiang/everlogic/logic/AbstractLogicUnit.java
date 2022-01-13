@@ -1,19 +1,23 @@
 package com.limengxiang.everlogic.logic;
 
-import com.limengxiang.everlogic.LogicUnit;
+import com.limengxiang.everlogic.ILogicUnit;
+import com.limengxiang.everlogic.LogicEvaluator;
+import com.limengxiang.everlogic.LogicUnitFactoryContainer;
 import com.limengxiang.everlogic.comparator.Comparator;
 import com.limengxiang.everlogic.converter.Converter;
 
 /**
  * @author LI Mengxiang <limengxiang876@gmail.com>
  */
-public abstract class AbstractLogicUnit implements LogicUnit {
+public abstract class AbstractLogicUnit implements ILogicUnit {
 
     protected Converter converter;
 
     protected Comparator comparator;
 
-    public AbstractLogicUnit() {}
+    protected LogicEvaluator evaluator;
+
+    protected LogicUnitFactoryContainer logicUnitFactoryContainer;
 
     public Converter getConverter() {
         if (converter == null) {
@@ -39,5 +43,21 @@ public abstract class AbstractLogicUnit implements LogicUnit {
 
     public void setComparator(Comparator comparator) {
         this.comparator = comparator;
+    }
+
+    public void setLogicUnitFactoryContainer(LogicUnitFactoryContainer container) {
+        logicUnitFactoryContainer = container;
+    }
+
+    public void setEvaluator(LogicEvaluator evaluator) {
+        this.evaluator = evaluator;
+    }
+
+    public LogicEvaluator getEvaludator() {
+        return evaluator;
+    }
+
+    public LogicUnitFactoryContainer getLogicUnitFactoryContainer() {
+        return logicUnitFactoryContainer;
     }
 }

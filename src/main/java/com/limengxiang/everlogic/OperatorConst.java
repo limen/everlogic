@@ -15,6 +15,11 @@ public class OperatorConst {
     public static final String LESS_THAN = "lt";
     public static final String LESS_THAN_OR_EQUAL = "lte";
 
+    public static final String BLANK = "blank";
+    public static final String NIL = "nil";
+    public static final String NOT_NIL = "not_nil";
+    public static final String REG_EX = "regex";
+
     /**
      * compatible to string
      */

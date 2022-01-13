@@ -1,14 +1,14 @@
 package com.limengxiang.everlogic.extend;
 
-import com.limengxiang.everlogic.LogicUnit;
-import com.limengxiang.everlogic.logic.AbstractLogicUnitFactory;
+import com.limengxiang.everlogic.ILogicUnit;
+import com.limengxiang.everlogic.ILogicUnitFactory;
 
 /**
  * @author LI Mengxiang <limengxiang876@gmail.com>
  */
-public class CustomLogicUnitFactory extends AbstractLogicUnitFactory {
+public class CustomLogicUnitFactory implements ILogicUnitFactory {
 
-    public LogicUnit getLogicUnit(Object id) {
+    public ILogicUnit getLogicUnit(Object id) {
         if (!(id instanceof CustomParamTypeEnum)) {
             return null;
         }
