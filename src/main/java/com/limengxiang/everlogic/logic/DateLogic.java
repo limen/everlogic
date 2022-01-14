@@ -52,6 +52,10 @@ public class DateLogic extends AbstractLogicUnit {
         }
 
         Date operand1 = (Date) getConverter().apply(operands.get(1));
+        if (getFormatter() != null) {
+            operand0 = (Date) getFormatter().apply(operand0);
+            operand1 = (Date) getFormatter().apply(operand1);
+        }
         int compare = getComparator().apply(operand0, operand1);
         switch (opEnum) {
             case equal:

@@ -8,4 +8,8 @@ public class FormatterConst {
         String TYPE_SUB = "sub";
     }
 
+    public interface Dates {
+        String TYPE_FORMAT = "format";
+    }
+
 }

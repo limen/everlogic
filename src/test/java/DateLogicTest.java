@@ -1,4 +1,6 @@
+import com.limengxiang.everlogic.FormatterConst;
 import com.limengxiang.everlogic.OperatorConst;
+import com.limengxiang.everlogic.formatter.DateFormatter;
 import com.limengxiang.everlogic.logic.DateLogic;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,5 +27,21 @@ public class DateLogicTest {
 
         Assert.assertTrue(dateLogic.process(OperatorConst.NIL, Arrays.asList("")));
         Assert.assertTrue(dateLogic.process(OperatorConst.NIL, Collections.singletonList(null)));
+    }
+
+    @Test
+    public void testFormatter() {
+        DateLogic dateLogic = new DateLogic();
+        DateFormatter formatter = new DateFormatter();
+        formatter.setType(FormatterConst.Dates.TYPE_FORMAT);
+        formatter.setArgs(Collections.singletonList("yyMMdd"));
+        dateLogic.setFormatter(formatter);
+        Assert.assertTrue(dateLogic.process(OperatorConst.EQUAL, Arrays.asList("1997-07-01 00:00:00", "1997-07-01 01:00:00")));
+
+        formatter.setArgs(Collections.singletonList("MMdd"));
+        Assert.assertTrue(dateLogic.process(OperatorConst.EQUAL, Arrays.asList("1998-07-01 00:00:00", "1997-07-01 01:00:00")));
+
+        formatter.setArgs(Collections.singletonList("HHmmss"));
+        Assert.assertTrue(dateLogic.process(OperatorConst.EQUAL, Arrays.asList("1998-07-01 01:10:00", "1997-07-01 01:10:00")));
     }
 }
