@@ -12,4 +12,10 @@ public class FormatterConst {
         String TYPE_FORMAT = "format";
     }
 
+    public interface Numbers {
+        String TYPE_ROUND = "round";
+        String TYPE_CEIL = "ceil";
+        String TYPE_CUT = "cut";
+    }
+
 }

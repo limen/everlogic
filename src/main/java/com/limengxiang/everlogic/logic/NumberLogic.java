@@ -53,6 +53,11 @@ public class NumberLogic extends AbstractLogicUnit {
             return leftOperand != null;
         }
 
+        if (getFormatter() != null) {
+            leftOperand = ((Number) getFormatter().apply(leftOperand)).doubleValue();
+            rightOperand = ((Number) getFormatter().apply(rightOperand)).doubleValue();
+        }
+
         int compare = getComparator().apply(leftOperand, rightOperand);
         switch (opEnum) {
             case gt:
