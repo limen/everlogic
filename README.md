@@ -1,45 +1,90 @@
 # everlogic
 
+轻量级的逻辑表达式引擎
+
 ## 特性
 
-支持
+支持无限层级的逻辑嵌套
 
-- 逻辑表达式，如 a>b and b==2 and c!=d，a>b or b==2 or c!=d
-- 聚合逻辑表达式，如 (a>b and b==2 and c!=d) and (a1>b1 or b1==2 or c1!=d1) and (a2>b2 xor b2==2 xor c2!=d2) 
+```sql
+(
+    (rule1)
+    and
+    (
+        (rule2)
+        or
+        (rule3)
+    )
+) and (
+    (rule4)
+    and
+    (
+        (rule5)
+        or
+        (
+            (
+                (rule7)
+                or 
+                (rule8)
+            )
+            and 
+            (
+                (rule9)
+                and 
+                (rule10)
+            )
+        )
+    )
+)
+```
 
-易于扩展
 
-- 自定义类型转换
-- 自定义比较运算
-- 自定义逻辑运算
+## 扩展性
 
-## 支持的数据类型
+一切皆可自定义
+
+- 自定义运算符
+- 自定义数据类型
+- 自定义类型转换, 将输入转为目标类型, 如字符串转数字
+- 自定义比较运算, 比较两个值的大小
+- 自定义逻辑运算, 根据运算符与操作数得到布尔值
+- 自定义数据转换，如取整, 四舍五入, 日期格式化
+
+## 内置数据类型
 
 - 字符串
 - 数字
 - 日期
 - 布尔
-- JSON
+- json
 - 字符串数组
 - 数字数组
 
-数组类型支持
-
-- Iterator
-- Collection
-
 ## 操作符
 
-- equal: 全部类型
-- ne: 全部类型
-- gt: 数字，字符串，日期，布尔
-- gte: 同gt
-- lt: 同gt
-- lte: 同gt
-- contain: JSON，数组+元素，数组+数组，元素类型为数字或字符串
-- inside: JSON，元素+数组，数组+数组，元素类型为数字或字符串
-- start_with: 字符串
-- end_with: 同start_with
+- nil: 为空
+- not_nil: 不为空
+- equal: 相等
+- ne: 不相等
+- gt: 大于
+- gte: 大于或等于
+- lt: 小于
+- lte: 小于或等于
+- contain: 包含
+- inside: 包含于
+- start_with: 以参数为开头
+- end_with: 以参数为结尾
+- regex: 正则匹配
+
+## 操作符适用类型
+
+- 字符串: nil, not_nil, equal, ne, lt, lte, gt, gte, contain, inside, start_with, end_with, regex
+- 数字: nil, not_nil, equal, ne, lt, lte, gt, gte
+- 日期: nil, not_nil, equal, ne, lt, lte, gt, gte
+- 布尔: equal, ne
+- json: equal, ne, contain, inside
+- 字符串数组: equal, ne, contain, inside
+- 数字数组: equal, ne, contain, inside
 
 ## JSON
 
@@ -61,10 +106,6 @@
 ### 逻辑表达式
 
 [LogicRuleTest](https://github.com/limen/everlogic/tree/master/src/test/java/LogicRuleTest.java)
-
-### 聚合逻辑表达式
-
-[AggregateLogicGroupTest](https://github.com/limen/everlogic/tree/master/src/test/java/AggregateLogicGroupTest.java)
 
 ### 字符串
 
@@ -90,7 +131,7 @@
 
 [NumberArrLogicTest](https://github.com/limen/everlogic/tree/master/src/test/java/NumberArrLogicTest.java)
 
-## Converter
+## 内置Converter
 
 将参数转为特定类型，如
 
@@ -98,14 +139,19 @@
 - NumberConverter 将参数转为Double类型
 - DateConverter 将参数转为Date类型
 
-## Comparator
+## 内置Comparator
 
 比较参数值，如
 
 - StringComparator 比较String类型变量
 - NumberComparator 比较Double类型变量
 - DateComparator 比较Date类型变量
-- CalenderComparator 增强了DateComparator，可指定比较的字段，如只比较年、月、日
+
+## 内置Formatter
+
+- StringFormatter 字符串转大写/小写, 取部分字符串
+- NumberFormatter 四舍五入, 取整, 浮点部分限制位数, 上取整
+- DateFormatter 格式化日期, 如格式化为yyMMdd
 
 ## 扩展
 
@@ -113,6 +159,6 @@
 
 - 实现一个逻辑单元, 如 StringCILogic
 - 定义新的 LogicUnitFactory
-- 注册 LogicUnitFactory，见 LogicUnitFactoryContainer, LogicGroup.logicUnitFactoryContainer, AggregateLogicGroup.logicUnitFactoryContainer
+- 注册 LogicUnitFactory，见 LogicEvaluator#addLogicUnitFactory
 
 
