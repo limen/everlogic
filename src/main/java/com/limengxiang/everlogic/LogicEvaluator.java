@@ -11,7 +11,6 @@ public class LogicEvaluator {
 
     public LogicEvaluator() {
         logicUnitFactoryContainer = new LogicUnitFactoryContainer();
-        logicUnitFactoryContainer.setEvaluator(this);
         reContainer = new DefaultReContainer();
     }
 
@@ -40,6 +39,7 @@ public class LogicEvaluator {
     }
 
     private boolean doEval(LogicRule rule) {
+        rule.setEvaluator(this);
         if (rule.getCondition() == null || rule.getRules() == null) {
             return evalSimpleRule(rule);
         }
@@ -58,7 +58,7 @@ public class LogicEvaluator {
 
     private boolean evalSimpleRule(LogicRule rule) {
         return logicUnitFactoryContainer
-                .getLogicUnit(rule.getParamType())
+                .getLogicUnit(rule)
                 .process(rule.getOperator(), rule.getOperands());
     }
 }

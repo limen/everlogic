@@ -11,9 +11,7 @@ import java.util.List;
  */
 public class LogicUnitFactoryContainer {
 
-    private List<ILogicUnitFactory> factories;
-
-    private LogicEvaluator evaluator;
+    private final List<ILogicUnitFactory> factories;
 
     public LogicUnitFactoryContainer() {
         factories = new ArrayList<>();
@@ -22,10 +20,6 @@ public class LogicUnitFactoryContainer {
 
     public void addFactory(ILogicUnitFactory factory) {
         factories.add(factory);
-    }
-
-    public void setEvaluator(LogicEvaluator evaluator) {
-        this.evaluator = evaluator;
     }
 
     public ILogicUnit getLogicUnit(Object id) throws RuntimeException {
@@ -40,10 +34,15 @@ public class LogicUnitFactoryContainer {
             throw new RuntimeException("Unsupported logic unit:" + id);
         }
 
-        if (logicUnit instanceof AbstractLogicUnit) {
-            ((AbstractLogicUnit) logicUnit).setEvaluator(evaluator);
-        }
+        return logicUnit;
+    }
 
+    public ILogicUnit getLogicUnit(LogicRule logicRule) {
+        ILogicUnit logicUnit = getLogicUnit(logicRule.getParamType());
+        if (logicUnit instanceof AbstractLogicUnit) {
+            ((AbstractLogicUnit) logicUnit).setFormatter(logicRule.getFormatter());
+            ((AbstractLogicUnit) logicUnit).setEvaluator(logicRule.getEvaluator());
+        }
         return logicUnit;
     }
 }

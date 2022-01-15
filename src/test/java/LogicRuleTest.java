@@ -1,4 +1,5 @@
 import com.limengxiang.everlogic.*;
+import com.limengxiang.everlogic.formatter.NumberFormatter;
 import com.limengxiang.everlogic.util.JSONUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -59,6 +60,39 @@ public class LogicRuleTest {
         Assert.assertFalse(logicEvaluator.eval(ruleDepth4));
         ruleDepth5.setRules(Arrays.asList(ruleDepth3, ruleDepth3, ruleDepth4));
         Assert.assertFalse(logicEvaluator.eval(ruleDepth5));
-        System.out.println(JSONUtil.stringify(ruleDepth5));
+//        System.out.println(JSONUtil.stringify(ruleDepth5));
+    }
+
+    @Test
+    public void testFormatter() {
+        LogicEvaluator evaluator = new LogicEvaluator();
+
+        LogicRule p1 = new LogicRule();
+        p1.setParamType(OperandTypeEnum.number);
+        p1.setOperator(OperatorConst.EQUAL);
+        p1.setOperands(Arrays.asList(1000.4, 1000.3));
+
+        Assert.assertFalse(evaluator.eval(p1));
+
+        NumberFormatter formatter = new NumberFormatter();
+        formatter.setType(FormatterConst.Numbers.TYPE_ROUND);
+        p1.setFormatter(formatter);
+
+        Assert.assertTrue(evaluator.eval(p1));
+    }
+
+    @Test
+    public void testRe() {
+        LogicEvaluator evaluator = new LogicEvaluator();
+
+        LogicRule p1 = new LogicRule();
+        p1.setParamType(OperandTypeEnum.string);
+        p1.setOperator(OperatorConst.REG_EX);
+
+        p1.setOperands(Arrays.asList("123", "^\\d+$"));
+        Assert.assertTrue(evaluator.eval(p1));
+
+        p1.setOperands(Arrays.asList("123abc", "^\\d+$"));
+        Assert.assertFalse(evaluator.eval(p1));
     }
 }

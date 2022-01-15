@@ -1,5 +1,8 @@
 package com.limengxiang.everlogic;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.limengxiang.everlogic.formatter.Formatter;
+
 import java.util.List;
 
 /**
@@ -13,9 +16,14 @@ import java.util.List;
  */
 public final class LogicRule {
 
+    @JsonIgnore
+    private LogicEvaluator evaluator;
+
     private LogicConditionEnum condition;
 
     private Object paramType;
+
+    private Formatter formatter;
 
     /**
      * @see OperatorConst
@@ -38,6 +46,14 @@ public final class LogicRule {
         this.paramType = paramType;
         this.operator = operator;
         this.operands = operands;
+    }
+
+    public LogicEvaluator getEvaluator() {
+        return evaluator;
+    }
+
+    public void setEvaluator(LogicEvaluator evaluator) {
+        this.evaluator = evaluator;
     }
 
     public LogicConditionEnum getCondition() {
@@ -76,7 +92,15 @@ public final class LogicRule {
         return rules;
     }
 
-    public void setRules(List<LogicRule> rules) {
+    public void setRules(Iterable<LogicRule> rules) {
         this.rules = rules;
+    }
+
+    public Formatter getFormatter() {
+        return formatter;
+    }
+
+    public void setFormatter(Formatter formatter) {
+        this.formatter = formatter;
     }
 }
