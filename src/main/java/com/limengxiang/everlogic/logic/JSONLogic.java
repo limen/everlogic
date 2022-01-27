@@ -1,8 +1,6 @@
 package com.limengxiang.everlogic.logic;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 import com.fasterxml.jackson.databind.node.NumericNode;
@@ -26,8 +24,6 @@ import java.util.List;
  */
 public class JSONLogic extends AbstractLogicUnit {
 
-    private static final ObjectMapper objectMapper;
-
     @Override
     public Converter getDefaultConverter() {
         return null;
@@ -45,10 +41,6 @@ public class JSONLogic extends AbstractLogicUnit {
         inside,
         nil,
         not_nil,
-    }
-
-    static {
-        objectMapper = new ObjectMapper();
     }
 
     @Override

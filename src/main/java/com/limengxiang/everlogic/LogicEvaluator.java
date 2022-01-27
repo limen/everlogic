@@ -1,16 +1,22 @@
 package com.limengxiang.everlogic;
 
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author LI Mengxiang <limengxiang876@gmail.com>
  */
 public class LogicEvaluator {
 
+    protected Class<? extends IEnvContainer> envContainerClass;
     protected LogicUnitFactoryContainer logicUnitFactoryContainer;
     protected IReContainer reContainer;
 
     public LogicEvaluator() {
         logicUnitFactoryContainer = new LogicUnitFactoryContainer();
+        envContainerClass = SimpleEnvContainer.class;
         reContainer = new DefaultReContainer();
     }
 
@@ -35,17 +41,20 @@ public class LogicEvaluator {
     }
 
     public boolean eval(LogicRule logicRule) {
-        return doEval(logicRule);
+        return doEval(logicRule, null);
     }
 
-    private boolean doEval(LogicRule rule) {
-        rule.setEvaluator(this);
+    public boolean eval(LogicRule logicRule, Map<String, Object> env) {
+        return doEval(logicRule, env);
+    }
+
+    private boolean doEval(LogicRule rule, Map<String, Object> env) {
         if (rule.getCondition() == null || rule.getRules() == null) {
-            return evalSimpleRule(rule);
+            return evalSimpleRule(rule, env);
         }
         boolean isAnd = rule.getCondition().equals(LogicConditionEnum.and);
         for (LogicRule r : rule.getRules()) {
-            boolean b = doEval(r);
+            boolean b = doEval(r, env);
             if (isAnd && !b) {
                 return false;
             }
@@ -56,9 +65,20 @@ public class LogicEvaluator {
         return isAnd;
     }
 
-    private boolean evalSimpleRule(LogicRule rule) {
+    private boolean evalSimpleRule(LogicRule rule, Map<String, Object> env) {
+        List<Object> operands = new ArrayList<>();
+        IEnvContainer envContainer;
+        try {
+            envContainer = envContainerClass.newInstance();
+            envContainer.setEnv(env);
+        } catch (Exception e) {
+            throw new RuntimeException("env container init error:" + e.getMessage());
+        }
+        for (Object op : rule.getOperands()) {
+            operands.add(envContainer.getValue(op));
+        }
         return logicUnitFactoryContainer
                 .getLogicUnit(rule)
-                .process(rule.getOperator(), rule.getOperands());
+                .process(rule.getOperator(), operands);
     }
 }

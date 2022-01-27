@@ -153,6 +153,13 @@
 - NumberFormatter 四舍五入, 取整, 浮点部分限制位数, 上取整
 - DateFormatter 格式化日期, 如格式化为yyMMdd
 
+## EnvContainer
+
+环境变量容器，当变量为动态类型时，通过EnvContainer实时获取。
+
+例如(#{a} and #{b})，其中#{a}、#{b}均为动态变量，运算时会先从容器中取值，再求最终结果。
+
+
 ## 扩展
 
 见 [extend](https://github.com/limen/everlogic/tree/master/src/main/java/com/limengxiang/everlogic/extend)
